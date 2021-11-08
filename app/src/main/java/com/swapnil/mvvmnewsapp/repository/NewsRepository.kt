@@ -2,6 +2,7 @@ package com.swapnil.mvvmnewsapp.repository
 
 import com.swapnil.mvvmnewsapp.db.ArticleDao
 import com.swapnil.mvvmnewsapp.network.NewsApiService
+import com.swapnil.mvvmnewsapp.ui.model.Article
 import javax.inject.Inject
 
 class NewsRepository
@@ -15,12 +16,10 @@ class NewsRepository
         searchQuery: String, pageNumber: Int
     ) = apiService.searchNews(searchQuery, pageNumber)
 
-    /*
-    do it later
+    suspend fun insert(article: Article) = articleDao.insert(article)
 
-    suspend fun insertTodo(article: Article) = articleDao.insert(article)
+    fun getSavedArticles() = articleDao.getAllArticles()
 
-    fun getAllArticles() = articleDao.getAllArticles()
+    suspend fun deleteArticle(article: Article) = articleDao.deleteArticle(article)
 
-    */
 }

@@ -41,7 +41,7 @@ class NewsAdapter : ListAdapter<Article, NewsAdapter.ArticleViewHolder>(differCa
             tvPublishedAt.text = article.publishedAt
             tvDescription.text = article.description
             tvTitle.text = article.title
-            tvSource.text = article.source.name
+            tvSource.text = article.source?.name
 
             root.setOnClickListener {
                 onItemClickListener?.let { it(article) }
