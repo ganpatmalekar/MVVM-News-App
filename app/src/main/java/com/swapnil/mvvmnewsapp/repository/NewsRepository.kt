@@ -1,5 +1,6 @@
 package com.swapnil.mvvmnewsapp.repository
 
+import android.util.Log
 import com.swapnil.mvvmnewsapp.db.ArticleDao
 import com.swapnil.mvvmnewsapp.network.NewsApiService
 import com.swapnil.mvvmnewsapp.ui.model.Article
@@ -22,4 +23,16 @@ class NewsRepository
 
     suspend fun deleteArticle(article: Article) = articleDao.deleteArticle(article)
 
+    suspend fun fetchNews(countryCode: String) {
+        val response = apiService.getBreakingNews(countryCode)
+
+        if (response.isSuccessful) {
+            articleDao.deleteAllArticles()
+            response.body()?.articles?.forEach {
+                insert(it)
+            }
+        } else {
+            Log.d("NewsRepository", "fetchNews: Error: ${response.message()}")
+        }
+    }
 }

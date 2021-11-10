@@ -1,11 +1,10 @@
 package com.swapnil.mvvmnewsapp.ui.fragments
 
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -26,7 +25,6 @@ class SavedNewsFragment : Fragment() {
 
     private lateinit var newsAdapter: NewsAdapter
     private val viewModel: NewsViewModel by viewModels()
-    private val TAG = "SavedNewsFragment"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -64,7 +62,7 @@ class SavedNewsFragment : Fragment() {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
-                val article = newsAdapter.currentList[position]
+                val article = newsAdapter.differ.currentList[position]
                 viewModel.deleteArticle(article)
                 Snackbar.make(view, "Article deleted successfully", Snackbar.LENGTH_LONG).apply {
                     setAction("Undo") {
@@ -82,7 +80,7 @@ class SavedNewsFragment : Fragment() {
         viewModel.getSavedArticles().observe(viewLifecycleOwner, { articles ->
             binding.tvNoArticleFound.visibility =
                 if (articles.isEmpty()) View.VISIBLE else View.INVISIBLE
-            newsAdapter.submitList(articles)
+            newsAdapter.differ.submitList(articles)
         })
 
     }

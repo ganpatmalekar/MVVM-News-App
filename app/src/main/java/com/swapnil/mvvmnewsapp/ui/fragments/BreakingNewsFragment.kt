@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsListView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -16,7 +15,6 @@ import com.swapnil.mvvmnewsapp.adapters.NewsAdapter
 import com.swapnil.mvvmnewsapp.databinding.FragmentBreakingNewsBinding
 import com.swapnil.mvvmnewsapp.ui.NewsViewModel
 import com.swapnil.mvvmnewsapp.utils.Constants.Companion.QUERY_PAGE_SIZE
-import com.swapnil.mvvmnewsapp.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -53,12 +51,18 @@ class BreakingNewsFragment : Fragment() {
             )
         }
 
-        viewModel.breakingNews.observe(viewLifecycleOwner, { response ->
+        viewModel.getNews().observe(viewLifecycleOwner, {
+            if (it.isNotEmpty()) {
+                newsAdapter.differ.submitList(it.toList())
+            }
+        })
+
+        /*viewModel.breakingNews.observe(viewLifecycleOwner, { response ->
             when (response) {
                 is Resource.Success -> {
                     hideProgressBar()
                     response.data?.let { newsResponse ->
-                        newsAdapter.submitList(newsResponse.articles.toList())
+                        newsAdapter.differ.submitList(newsResponse.articles.toList())
                         val totalPages = newsResponse.totalResults / QUERY_PAGE_SIZE + 2
                         isLastPage = viewModel.breakingNewsPage == totalPages
                         if (isLastPage)
@@ -78,7 +82,7 @@ class BreakingNewsFragment : Fragment() {
                 }
             }
 
-        })
+        })*/
     }
 
     private fun hideProgressBar() {
